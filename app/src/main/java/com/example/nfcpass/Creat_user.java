@@ -4,29 +4,41 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class Creat_user extends AppCompatActivity {
+
+    Button go_shop,go_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_creat_user);
+
+        go_user = findViewById(R.id.go_user);
+        go_shop = findViewById(R.id.go_shop);
 
 
-        Handler handler = new Handler();
-
-        handler.postDelayed(new Runnable() {
+        go_user.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                Intent intent = new Intent(MainActivity.this,Creat_user.class);
+            public void onClick(View view) {
+                Intent intent = new Intent(Creat_user.this,Check_user_doc.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }
-        },1000);
+        });
 
+        go_shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Creat_user.this,Check_shop_doc.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -46,6 +58,6 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
-    }
 
+    }
 }
