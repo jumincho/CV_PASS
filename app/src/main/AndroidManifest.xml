@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:name=".Check_shop_doc"
+            android:exported="false" />
+        <activity
             android:name=".Check_user_doc"
             android:exported="false" />
         <activity

@@ -6,28 +6,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/cv_check_lay"
-    tools:context=".Check_user_doc">
+    tools:context=".Check_shop_doc">
 
     <LinearLayout
-        android:id="@+id/checkTitle_user"
+        android:id="@+id/checkTitle_shop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
         <TextView
-            android:id="@+id/user_check_title"
+            android:id="@+id/shop_check_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/gmsansmid"
             android:gravity="center"
-            android:text="백신 증명서 인증"
+            android:text="사업자 인증"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
         <View
-            android:id="@+id/user_check_title_under_line"
+            android:id="@+id/shop_check_title_under_line"
             android:layout_width="match_parent"
             android:layout_height="2px"
             android:layout_marginTop="5dp"
@@ -36,7 +36,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/doc_number_user"
+        android:id="@+id/doc_number_shop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -48,13 +48,13 @@
         android:textSize="20sp" />
 
     <LinearLayout
-        android:id="@+id/input_doc_number"
+        android:id="@+id/input_doc_number_shop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/User_doc_1_input"
+            android:id="@+id/shop_doc_1_input"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -76,7 +76,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/User_doc_2_input"
+            android:id="@+id/shop_doc_2_input"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -98,7 +98,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/User_doc_3_input"
+            android:id="@+id/shop_doc_3_input"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -108,31 +108,10 @@
             android:gravity="center"
             android:maxLength="6" />
 
-        <TextView
-            android:id="@+id/slide_three"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/gmsansmid"
-            android:gravity="center"
-            android:text="-"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/User_doc_4_input"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:gravity="center"
-            android:maxLength="6" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/user_check"
+        android:id="@+id/shop_check"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
