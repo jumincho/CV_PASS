@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/after/AndroidStudioProjects/NfcPass/app/src/main/res/drawable/button_line.xml" value="0.1953125" />
         <entry key="..\:/Users/after/AndroidStudioProjects/NfcPass/app/src/main/res/drawable/cycle_box_line.xml" value="0.1953125" />
         <entry key="..\:/Users/after/AndroidStudioProjects/NfcPass/app/src/main/res/drawable/underline.xml" value="0.1953125" />
         <entry key="..\:/Users/after/AndroidStudioProjects/NfcPass/app/src/main/res/layout/activity_check_user_doc.xml" value="0.17916666666666667" />
