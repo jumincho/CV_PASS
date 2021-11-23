@@ -1,19 +1,41 @@
 package com.example.nfcpass;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
+
 
 public class Check_user_doc extends AppCompatActivity {
+
+    Button gopass;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_user_doc);
+
+        gopass = findViewById(R.id.user_check);
+
+        gopass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Check_user_doc.this,Nfc_pass_check.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
+
     }
+
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -34,5 +56,6 @@ public class Check_user_doc extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
     }
+
 
 }
