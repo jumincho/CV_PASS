@@ -15,14 +15,14 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
@@ -39,42 +39,48 @@ public class Nfc_pass_check extends Activity {
     String check;
     LinearLayout shop_mode,user_mode;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc_pass_check);
         context = this;
 
-        //tvNFCContent = (TextView) findViewById(R.id.nfc_contents); // NFC 읽은 값 표시
-        //message = (TextView) findViewById(R.id.edit_tag); // 기록할 메세지 작성
-        //btnWrite = (Button) findViewById(R.id.button); // 기록 버튼
-        shop_mode = findViewById(R.id.shop_mode);
-        user_mode = findViewById(R.id.user_mode);
-
-        Intent intent = getIntent();
-        if(intent.getStringExtra("상인") != null) { //사업자 모드인지 / 유저 모드인지 구별 해줌
-            check = "1"; // 사업자모드
-            shop_mode.setVisibility(View.VISIBLE);
-            user_mode.setVisibility(View.GONE);
-        }else{
-            check = "2"; // 유저 모드
-            shop_mode.setVisibility(View.GONE);
-            user_mode.setVisibility(View.VISIBLE);
-        }
-
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status != ERROR) {
+                if (status != ERROR) {
                     // 언어를 선택한다.
                     tts.setLanguage(Locale.KOREAN);
                 }
             }
         });
 
+        shop_mode = findViewById(R.id.shop_mode);
+        user_mode = findViewById(R.id.user_mode);
+
+        Intent intent = getIntent();
+        if(intent.getStringExtra("값") != null) { //사업자 모드인지 / 유저 모드인지 구별 해줌
+            check = intent.getStringExtra("값");
+        }else{
+            check = "3";
+        }
+
+        if(check.equals("1")){ // 상인 모드
+            shop_mode.setVisibility(View.VISIBLE);
+            user_mode.setVisibility(View.GONE);
+        } else if (check.equals("2")) { // 사용자 실행 모드
+            shop_mode.setVisibility(View.GONE);
+            user_mode.setVisibility(View.VISIBLE);
+        }
+        else{ // 빠른 실행모드
+            shop_mode.setVisibility(View.GONE);
+            user_mode.setVisibility(View.VISIBLE);
+        }
+
 
         if(check.equals("1")) {
-            writeTag wt = new writeTag("감자탕");
+            writeTag wt = new writeTag("감자탕"); // 이곳에 사업자 정보 입력
             wt.start();
             shop_mode.setVisibility(View.VISIBLE);
         }else{}
@@ -88,9 +94,8 @@ public class Nfc_pass_check extends Activity {
             finish();
         }
 
-        // 태그 읽기 입장 절차는 여기서 진행
-        readFromIntent(getIntent());
 
+        readFromIntent(getIntent());
 
 
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -117,6 +122,7 @@ public class Nfc_pass_check extends Activity {
         }
     }
     private void buildTagViews(NdefMessage[] msgs) {
+
         if (msgs == null || msgs.length == 0) return;
 
         String text = "";
@@ -128,22 +134,27 @@ public class Nfc_pass_check extends Activity {
             // 받아온 Tag 값
             text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
-            Log.e("UnsupportedEncoding", e.toString());
         }
 
 
 
 
-        if(check.equals("2")) {
+        if(check.equals("2")||check.equals("3")) {
             tts.setPitch(0.3f);
             tts.setSpeechRate(2.5f);
             tts.speak("입장이 완료 되었습니다.", TextToSpeech.QUEUE_FLUSH, null);
-           // 이곳에 파이어베이스 연동
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            long[] a = {300,100,300,100};
+            vibrator.vibrate(a,-1); // 0.5초간 진동
+            Toast.makeText(this,"입장이 완료 되었습니다.",Toast.LENGTH_LONG).show();
+
+            // 이곳에 파이어베이스 연동
+
         }else{
             tts.setPitch(0.3f);
             tts.setSpeechRate(2.5f);
             tts.speak("기록이 완료 되었습니다.", TextToSpeech.QUEUE_FLUSH, null);
-            Toast.makeText(this,"기록이 완료 되었습니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"기록이 완료 되었습니다",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -244,10 +255,14 @@ public class Nfc_pass_check extends Activity {
 
         @Override
         public void run() {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            long[] a = {1000,100,1000,100};
+            vibrator.vibrate(a,0);
             while (true) {
                 try {
                     if(myTag != null) {
-                        write("공대 7호관", myTag);
+                        write(name, myTag);
+                        vibrator.cancel();
                         break;
                     }
                 } catch (IOException e) {

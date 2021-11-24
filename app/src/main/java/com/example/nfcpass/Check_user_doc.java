@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class Check_user_doc extends AppCompatActivity {
-    private static final String CLOUD_VISION_API_KEY = "AIzaSyAXpv-1de-flR2eZg05xBjl_CpWV-ZcpRQ";
+    private static final String CLOUD_VISION_API_KEY = BuildConfig.API_KEY;
     public static final String FILE_NAME = "temp.jpg";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
@@ -57,13 +57,17 @@ public class Check_user_doc extends AppCompatActivity {
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
     public static final int CAMERA_IMAGE_REQUEST = 3;
 
-    private TextView mImageDetails;
-    private ImageView mMainImage;
+    TextView mImageDetails;
+    ImageView mMainImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_user_doc);
+
+        mImageDetails = findViewById(R.id.textView);
+        mMainImage = findViewById(R.id.imageView);
+
 
         FloatingActionButton fab = findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(view -> {
@@ -242,6 +246,8 @@ public class Check_user_doc extends AppCompatActivity {
     private static class LableDetectionTask extends AsyncTask<Object, Void, String> {
         private final WeakReference<Check_user_doc> Check_UserWeakReference;
         private Vision.Images.Annotate mRequest;
+
+
 
         LableDetectionTask(Check_user_doc activity, Vision.Images.Annotate annotate) {
             Check_UserWeakReference = new WeakReference<>(activity);
