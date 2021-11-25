@@ -53,7 +53,7 @@ public class Nfc_pass_check extends Activity {
     SimpleDateFormat todaynowformat = new SimpleDateFormat("yyyy-MM-dd");
     String time,todaytime;
     int number;
-    String name;
+    String name,shop_num,shop_name;
 
 
 
@@ -87,6 +87,8 @@ public class Nfc_pass_check extends Activity {
         if(check.equals("1")){ // 상인 모드
             shop_mode.setVisibility(View.VISIBLE);
             user_mode.setVisibility(View.GONE);
+            shop_name = intent.getStringExtra("사업자이름");
+            shop_num = intent.getStringExtra("사업자번호");
         } else if (check.equals("2")) { // 사용자 실행 모드
             shop_mode.setVisibility(View.GONE);
             user_mode.setVisibility(View.VISIBLE);
@@ -98,7 +100,7 @@ public class Nfc_pass_check extends Activity {
 
 
         if(check.equals("1")) {
-            writeTag wt = new writeTag("감자탕"); // 이곳에 사업자 정보 입력 "사업자 번호" + "사장님 이름"
+            writeTag wt = new writeTag(shop_num+shop_name); // 이곳에 사업자 정보 입력 "사업자 번호" + "사장님 이름"
             wt.start();
             shop_mode.setVisibility(View.VISIBLE);
         }else{}
@@ -183,15 +185,14 @@ public class Nfc_pass_check extends Activity {
             long[] a = {300,100,300,100};
             vibrator.vibrate(a,-1); // 0.5초간 진동
             Toast.makeText(this,"입장이 완료 되었습니다.",Toast.LENGTH_LONG).show();
-
             String user_name = name;
             Map<String,Object> userdate = new HashMap<>();
             userdate.put("전화번호","0"+String.valueOf(number));
             userdate.put("시간",time);
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-            db.collection("사업장").document("후생관").collection(todaytime).document(name).set(userdate);
+            Log.i("user",text);
+            db.collection("사업장").document(text).collection(todaytime).document(user_name).set(userdate);
             //UUID를 사용하여 이름에 더하여 동명이인 방지 및 여러번 입장 체크
 
 
@@ -202,7 +203,7 @@ public class Nfc_pass_check extends Activity {
             tts.speak("기록이 완료 되었습니다.", TextToSpeech.QUEUE_FLUSH, null);
             Toast.makeText(this,"기록이 완료 되었습니다",Toast.LENGTH_LONG).show();
 
-         //   db.collection("사업장").document("이마트");
+
         }
     }
 
@@ -294,11 +295,11 @@ public class Nfc_pass_check extends Activity {
 
     class writeTag extends Thread {
 
-        String name;
+        String shopname;
 
 
         public writeTag(String name) {
-            this.name = name;
+            this.shopname = name;
         }
 
         @Override
@@ -309,7 +310,7 @@ public class Nfc_pass_check extends Activity {
             while (true) {
                 try {
                     if(myTag != null) {
-                        write(name, myTag);
+                        write(shopname, myTag);
                         vibrator.cancel();
                         break;
                     }

@@ -99,6 +99,14 @@ public class Check_shop_doc extends AppCompatActivity {
             }else {
                 resultName = dataParser.getName();
                 resultNumber = dataParser.getNo();
+
+                Intent intent = new Intent(Check_shop_doc.this,Nfc_pass_check.class);
+                intent.putExtra("값","1");
+                intent.putExtra("사업자번호",resultNumber);
+                intent.putExtra("사업자이름",resultName);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                finish();
             }
          }
     }
