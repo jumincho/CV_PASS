@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.Image;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -19,7 +18,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -33,7 +31,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -41,6 +38,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class Nfc_pass_check extends Activity {
 
@@ -58,7 +56,7 @@ public class Nfc_pass_check extends Activity {
     SimpleDateFormat mtimeformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     SimpleDateFormat todaynowformat = new SimpleDateFormat("yyyy-MM-dd");
     String time,todaytime;
-    int number;
+    Long number;
     String name,shop_num,shop_name,Vtry,Vday;
     TextView va_count,user_check_day;
     ImageButton imageButton;
@@ -226,9 +224,9 @@ public class Nfc_pass_check extends Activity {
             Map<String,Object> userdate = new HashMap<>();
             userdate.put("전화번호","0"+String.valueOf(number));
             userdate.put("시간",time);
-
+            String rand = UUID.randomUUID().toString();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("사업장").document(text).collection(todaytime).document(user_name).update(userdate);
+            db.collection("사업장").document(text).collection(todaytime).document(user_name+rand).set(userdate);
             //UUID를 사용하여 이름에 더하여 동명이인 방지 및 여러번 입장 체크
 
 
@@ -362,7 +360,7 @@ public class Nfc_pass_check extends Activity {
     public void readUserDate() throws IOException {
         FileInputStream fis = openFileInput("UserDate.dat");
         DataInputStream dis = new DataInputStream(fis);
-        number = dis.readInt();
+        number = dis.readLong();
         name = dis.readUTF();
         dis.close();
     }
