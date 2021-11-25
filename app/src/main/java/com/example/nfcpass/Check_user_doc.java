@@ -153,7 +153,6 @@ public class Check_user_doc extends AppCompatActivity {
 
                 callCloudVision(bitmap);
                 mMainImage.setImageBitmap(bitmap);//올려놓은 사진의 bitmap 설정해줌
-                Log.i("Workout", uri.toString());
             } catch (IOException e) {
                 Log.d(TAG, "Image picking failed because " + e.getMessage());
                 Toast.makeText(this, "Something is wrong with that image. Pick a different one please.", Toast.LENGTH_LONG).show();
@@ -309,7 +308,7 @@ public class Check_user_doc extends AppCompatActivity {
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 cnt++;
-                if(label.getDescription().equals("1")||label.getDescription().equals("2")){
+                if(label.getDescription().equals("1")||label.getDescription().equals("2")){//접종 차수 확인
                     if(labels.get(cnt).getDescription().equals("차")){
                         Vtry = label.getDescription() + labels.get(cnt).getDescription();
                     }
@@ -323,12 +322,12 @@ public class Check_user_doc extends AppCompatActivity {
                         }
                     }
                 }
-            }//섹스섹스스섹스섹스
+            }
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
                 Intent intent = new Intent(context, Nfc_pass_check.class);
                 intent.putExtra("백신", Vtry);
                 intent.putExtra("인증", Vday);
-               // context.startActivity(intent);
+               context.startActivity(intent);
             }else {
                         notifi notifis = new notifi();
                         notifis.start();
