@@ -153,7 +153,7 @@ public class Check_user_doc extends AppCompatActivity {
 
                 callCloudVision(bitmap);
                 mMainImage.setImageBitmap(bitmap);//올려놓은 사진의 bitmap 설정해줌
-                Log.i("Workout", uri.toString());
+
             } catch (IOException e) {
                 Log.d(TAG, "Image picking failed because " + e.getMessage());
                 Toast.makeText(this, "Something is wrong with that image. Pick a different one please.", Toast.LENGTH_LONG).show();
@@ -320,10 +320,11 @@ public class Check_user_doc extends AppCompatActivity {
                         Vday = labels.get(cnt+2).getDescription().substring(0,labels.get(cnt+2).getDescription().length()-1);
                         if(Vday.equals("1")){//2차 접종 후 14일 경과시
                             Vday = labels.get(cnt+5).getDescription().substring(0,labels.get(cnt+5).getDescription().length()-1);
+                            Log.i("Workout","sex!!");
                         }
                     }
                 }
-            }//섹스섹스스섹스섹스
+            }
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
                 Intent intent = new Intent(context, Nfc_pass_check.class);
                 intent.putExtra("백신", Vtry);
