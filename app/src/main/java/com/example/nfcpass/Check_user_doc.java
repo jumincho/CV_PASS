@@ -94,7 +94,7 @@ public class Check_user_doc extends AppCompatActivity {
                             .setPositiveButton("사진 선택", (dialog, which) -> startGalleryChooser());
                     builder.create().show();
                     try {
-                        saveUserDate(check_edit_name.getText().toString(),Integer.parseInt(openday1.getText().toString()));
+                        saveUserDate(check_edit_name.getText().toString(),Long.parseLong(String.valueOf(openday1.getText())));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -360,6 +360,7 @@ public class Check_user_doc extends AppCompatActivity {
                 intent.putExtra("인증", Vday);
                 saveUserDatevac(Vtry,Vday);
                 context.startActivity(intent);
+                finish();
             }else {
                         dialog2.dismiss();
                         notifi notifis = new notifi();
@@ -409,10 +410,10 @@ public class Check_user_doc extends AppCompatActivity {
         }
     }
 
-    public void saveUserDate(String name, int number) throws IOException {
+    public void saveUserDate(String name, long number) throws IOException {
         FileOutputStream fos = openFileOutput("UserDate.dat",MODE_PRIVATE);
         DataOutputStream dos = new DataOutputStream(fos); //데이터를 쓴다.
-        dos.writeInt(number);
+        dos.writeLong(number);
         dos.writeUTF(name);
         dos.flush();
         dos.close();

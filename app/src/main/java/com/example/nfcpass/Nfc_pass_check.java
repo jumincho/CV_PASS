@@ -228,8 +228,7 @@ public class Nfc_pass_check extends Activity {
             userdate.put("시간",time);
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Log.i("user",text);
-            db.collection("사업장").document(text).collection(todaytime).document(user_name).set(userdate);
+            db.collection("사업장").document(text).collection(todaytime).document(user_name).update(userdate);
             //UUID를 사용하여 이름에 더하여 동명이인 방지 및 여러번 입장 체크
 
 
