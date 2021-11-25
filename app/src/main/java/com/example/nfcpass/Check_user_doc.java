@@ -1,6 +1,7 @@
 package com.example.nfcpass;
 
 import android.Manifest;
+import android.app.MediaRouteButton;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -59,10 +62,12 @@ public class Check_user_doc extends AppCompatActivity {
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
     public static final int CAMERA_IMAGE_REQUEST = 3;
     private static Context context;
+    private static TextView noti;
 
     ImageView mMainImage;
     Button user_check;
     EditText check_edit_name , openday1;
+
 
 
     @Override
@@ -74,11 +79,12 @@ public class Check_user_doc extends AppCompatActivity {
         user_check = findViewById(R.id.user_check);
         check_edit_name = findViewById(R.id.check_edit_name);
         openday1 = findViewById(R.id.openday1);
+        noti = findViewById(R.id.noti);
 
         user_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(check_edit_name.getText().toString().equals("") || openday1.getText().toString().equals("") || openday1.getText().toString().length() == 10)) {
+                if (!(check_edit_name.getText().toString().equals("") || openday1.getText().toString().equals("") && openday1.getText().toString().length() == 10)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Check_user_doc.this);
                     builder
                             .setMessage("인증서 사진을 불러와주세요.")
@@ -261,7 +267,7 @@ public class Check_user_doc extends AppCompatActivity {
         }
     }
 
-    private static class LableDetectionTask extends AsyncTask<Object, Void, String> {
+    private class LableDetectionTask extends AsyncTask<Object, Void, String> {
         private final WeakReference<Check_user_doc> Check_UserWeakReference;
         private Vision.Images.Annotate mRequest;
 
@@ -316,30 +322,41 @@ public class Check_user_doc extends AppCompatActivity {
         return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false);
     }
 
-    private static String convertResponseToString(BatchAnnotateImagesResponse response) {
+    private String convertResponseToString(BatchAnnotateImagesResponse response) {
 
         StringBuilder message = new StringBuilder("I found these things:\n\n");
         int cnt = 0;
-        String Vtry = "", Vday = "";
+        String Vtry = "3", Vday = "3";
         List<EntityAnnotation> labels = response.getResponses().get(0).getTextAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 cnt++;
-                if(label.getDescription().equals("1")){
+                if(label.getDescription().equals("1")||label.getDescription().equals("2")){
                     if(labels.get(cnt).getDescription().equals("차")){
                         Vtry = label.getDescription() + labels.get(cnt).getDescription();
                     }
                 }
                 if(label.getDescription().equals("일자")){
-                    Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1);
+                    Vday = labels.get(cnt+1).getDescription().substring(0,labels.get(cnt).getDescription().length()-1);
                 }
+                Log.i("내용3",label.getDescription());
+
+            }
+            if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
+                Log.i("내용1",Vtry);
+                Log.i("내용2",Vday);
+                Intent intent = new Intent(context, Nfc_pass_check.class);
+                intent.putExtra("백신", Vtry);
+                intent.putExtra("인증", Vday);
+                context.startActivity(intent);
+            }else {
+                Log.i("내용1",Vtry);
+                Log.i("내용2",Vday);
+                        notifi notifis = new notifi();
+                        notifis.start();
 
             }
 
-            Intent intent = new Intent(context,Nfc_pass_check.class);
-            intent.putExtra("백신",Vtry);
-            intent.putExtra("인증",Vday);
-            context.startActivity(intent);
         } else {
             message.append("nothing");
         }
@@ -365,6 +382,21 @@ public class Check_user_doc extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
+    }
+
+
+    class notifi extends Thread {
+
+        @Override
+        public void run(){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "사진을 다시 입력해주세요. (COOV 인증서)", Toast.LENGTH_SHORT).show();
+                    mMainImage.setImageBitmap(null);
+                }
+            });
+        }
     }
 
 }
