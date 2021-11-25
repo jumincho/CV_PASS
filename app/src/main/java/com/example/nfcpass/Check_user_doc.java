@@ -34,6 +34,7 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -68,6 +69,7 @@ public class Check_user_doc extends AppCompatActivity {
         mImageDetails = findViewById(R.id.textView);
         mMainImage = findViewById(R.id.imageView);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         FloatingActionButton fab = findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(view -> {
@@ -78,6 +80,7 @@ public class Check_user_doc extends AppCompatActivity {
                     .setNegativeButton("Camera", (dialog, which) -> startCamera());
             builder.create().show();
         });
+
 
     }
 

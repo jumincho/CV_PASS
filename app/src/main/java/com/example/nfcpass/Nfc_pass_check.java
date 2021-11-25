@@ -22,10 +22,27 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.io.File;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Nfc_pass_check extends Activity {
 
@@ -38,13 +55,20 @@ public class Nfc_pass_check extends Activity {
     private TextToSpeech tts;
     String check;
     LinearLayout shop_mode,user_mode;
-
+    long timenow,todaynow;
+    Date mtime,mtoday;
+    SimpleDateFormat mtimeformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat todaynowformat = new SimpleDateFormat("yyyy-MM-dd");
+    String time,todaytime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc_pass_check);
         context = this;
+
+        shop_mode = findViewById(R.id.shop_mode);
+        user_mode = findViewById(R.id.user_mode);
 
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -55,9 +79,6 @@ public class Nfc_pass_check extends Activity {
                 }
             }
         });
-
-        shop_mode = findViewById(R.id.shop_mode);
-        user_mode = findViewById(R.id.user_mode);
 
         Intent intent = getIntent();
         if(intent.getStringExtra("값") != null) { //사업자 모드인지 / 유저 모드인지 구별 해줌
@@ -80,7 +101,7 @@ public class Nfc_pass_check extends Activity {
 
 
         if(check.equals("1")) {
-            writeTag wt = new writeTag("감자탕"); // 이곳에 사업자 정보 입력
+            writeTag wt = new writeTag("감자탕"); // 이곳에 사업자 정보 입력 "사업자 번호" + "사장님 이름"
             wt.start();
             shop_mode.setVisibility(View.VISIBLE);
         }else{}
@@ -93,6 +114,15 @@ public class Nfc_pass_check extends Activity {
             Toast.makeText(this, "NFC를 지원하지 않는 기기 입니다. QR체크인을 진행해 주세요.", Toast.LENGTH_LONG).show();
             finish();
         }
+
+        timenow = System.currentTimeMillis();
+        mtime = new Date(timenow);
+        time = mtimeformat.format(mtime);
+
+
+        todaynow = System.currentTimeMillis();
+        mtoday = new Date(todaynow);
+        todaytime = todaynowformat.format(mtoday);
 
 
         readFromIntent(getIntent());
@@ -123,6 +153,8 @@ public class Nfc_pass_check extends Activity {
     }
     private void buildTagViews(NdefMessage[] msgs) {
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         if (msgs == null || msgs.length == 0) return;
 
         String text = "";
@@ -148,13 +180,24 @@ public class Nfc_pass_check extends Activity {
             vibrator.vibrate(a,-1); // 0.5초간 진동
             Toast.makeText(this,"입장이 완료 되었습니다.",Toast.LENGTH_LONG).show();
 
-            // 이곳에 파이어베이스 연동
+            String name = "조주민";
+            Map<String,Object> userdate = new HashMap<>();
+            userdate.put("전화번호","010-5602-3622");
+            userdate.put("시간",time);
+
+
+            db.collection("사업장").document("후생관").collection(todaytime).document(name).set(userdate);
+            //UUID를 사용하여 이름에 더하여 동명이인 방지 및 여러번 입장 체크
+
+
 
         }else{
             tts.setPitch(0.3f);
             tts.setSpeechRate(2.5f);
             tts.speak("기록이 완료 되었습니다.", TextToSpeech.QUEUE_FLUSH, null);
             Toast.makeText(this,"기록이 완료 되었습니다",Toast.LENGTH_LONG).show();
+
+            db.collection("사업장").document("이마트");
         }
     }
 

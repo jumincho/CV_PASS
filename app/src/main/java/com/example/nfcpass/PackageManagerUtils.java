@@ -8,7 +8,7 @@ import android.content.pm.Signature;
 import androidx.annotation.NonNull;
 
 
-import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.io.BaseEncoding;
+import com.google.common.io.BaseEncoding;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
