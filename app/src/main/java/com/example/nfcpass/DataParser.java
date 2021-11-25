@@ -21,9 +21,11 @@ public class DataParser {
             JSONObject jsonObj = new JSONObject(b_data);
             JSONArray jsonArray = jsonObj.getJSONArray("data");
             JSONObject jsonObjData = jsonArray.getJSONObject(0);
+            JSONObject jsonObjReq = jsonObjData.getJSONObject("request_param");
+
+            this.b_name = jsonObjReq.getString("p_nm");
             this.b_no = jsonObjData.getString("b_no");
             this.valid = jsonObjData.getString("valid");
-            this.b_name = jsonObjData.getString("b_name");
             this.b_date = jsonObjData.getString("b_date");
         } catch (JSONException e) {
             e.printStackTrace();
