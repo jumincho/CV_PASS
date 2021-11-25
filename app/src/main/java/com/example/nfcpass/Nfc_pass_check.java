@@ -5,6 +5,7 @@ import static android.net.wifi.p2p.WifiP2pManager.ERROR;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.Image;
@@ -25,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -371,5 +374,40 @@ public class Nfc_pass_check extends Activity {
         Vtry = dis.readUTF();
         Vday = dis.readUTF();
         dis.close();
+    }
+
+    private long backKeyPressedTime = 0;
+
+    //뒤로 가기 키를 누르면 입력을 종료 시킨다.
+    @Override
+    public void onBackPressed() {
+
+        if (System.currentTimeMillis() > backKeyPressedTime + 500) {
+            backKeyPressedTime = System.currentTimeMillis();
+            return;
+        }
+
+        if (System.currentTimeMillis() <= backKeyPressedTime + 500) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("종료").setMessage("종료 하시겠습니까?");
+            AlertDialog.Builder builder1 = builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finishAndRemoveTask();
+                }
+            });
+
+            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+
     }
 }
