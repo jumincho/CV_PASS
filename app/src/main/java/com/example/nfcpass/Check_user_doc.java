@@ -327,20 +327,28 @@ public class Check_user_doc extends AppCompatActivity {
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 cnt++;
-                if(label.getDescription().equals("1")||label.getDescription().equals("2")){
+                if(label.getDescription().equals("1")||label.getDescription().equals("2")){ // 접종 횟수 여부
                     if(labels.get(cnt).getDescription().equals("차")){
                         Vtry = label.getDescription() + labels.get(cnt).getDescription();
                     }
                 }
-                if(label.getDescription().equals("일자")){
-                    Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1); //1차접종시
+                else if(label.getDescription().equals("추가")){ //부스터샷 추가접종 여부
+                    if(labels.get(cnt).getDescription().equals("접종")){
+                        Vtry = label.getDescription() + labels.get(cnt).getDescription();
+                    }
+                }
+                else if(label.getDescription().equals("일자")){
+                    Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1); //1차접종시 및 부스터샷
                     if(Vday.equals("접")){//2차 접종시
                         Vday = labels.get(cnt+2).getDescription().substring(0,labels.get(cnt+2).getDescription().length()-1);
                         if(Vday.equals("1")){//2차 접종 후 14일 경과시
                             Vday = labels.get(cnt+5).getDescription().substring(0,labels.get(cnt+5).getDescription().length()-1);
                         }
                     }
+
+
                 }
+
             }
 
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
