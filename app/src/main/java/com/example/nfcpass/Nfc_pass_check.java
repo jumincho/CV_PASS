@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -19,7 +20,9 @@ import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -53,7 +56,10 @@ public class Nfc_pass_check extends Activity {
     SimpleDateFormat todaynowformat = new SimpleDateFormat("yyyy-MM-dd");
     String time,todaytime;
     int number;
-    String name,shop_num,shop_name;
+    String name,shop_num,shop_name,Vtry,Vday;
+    TextView va_count,user_check_day;
+    ImageButton imageButton;
+    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 
 
@@ -66,6 +72,9 @@ public class Nfc_pass_check extends Activity {
 
         shop_mode = findViewById(R.id.shop_mode);
         user_mode = findViewById(R.id.user_mode);
+        va_count = findViewById(R.id.va_count);
+        user_check_day = findViewById(R.id.user_check_day);
+        imageButton = findViewById(R.id.changebutton);
 
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -92,10 +101,22 @@ public class Nfc_pass_check extends Activity {
         } else if (check.equals("2")) { // 사용자 실행 모드
             shop_mode.setVisibility(View.GONE);
             user_mode.setVisibility(View.VISIBLE);
+            Vtry = intent.getStringExtra("백신");
+            Vday = intent.getStringExtra("인증");
+            va_count.setText(Vtry);
+            user_check_day.setText(Vday);
+
         }
         else{ // 빠른 실행모드
             shop_mode.setVisibility(View.GONE);
             user_mode.setVisibility(View.VISIBLE);
+            try {
+                readUserDatevac();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            va_count.setText(Vtry);
+            user_check_day.setText(Vday);
         }
 
 
@@ -136,6 +157,18 @@ public class Nfc_pass_check extends Activity {
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writeTagFilters = new IntentFilter[] { tagDetected };
+
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vibrator.cancel();
+                Intent intent1 = new Intent();
+                startActivity(intent1);
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                finish();
+            }
+        });
     }
 
 
@@ -304,7 +337,6 @@ public class Nfc_pass_check extends Activity {
 
         @Override
         public void run() {
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             long[] a = {1000,100,1000,100};
             vibrator.vibrate(a,0);
             while (true) {
@@ -329,6 +361,14 @@ public class Nfc_pass_check extends Activity {
         DataInputStream dis = new DataInputStream(fis);
         number = dis.readInt();
         name = dis.readUTF();
+        dis.close();
+    }
+
+    public void readUserDatevac() throws IOException {
+        FileInputStream fis = openFileInput("UserDatevac.dat");
+        DataInputStream dis = new DataInputStream(fis);
+        Vtry = dis.readUTF();
+        Vday = dis.readUTF();
         dis.close();
     }
 }

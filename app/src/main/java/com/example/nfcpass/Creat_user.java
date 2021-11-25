@@ -26,7 +26,7 @@ public class Creat_user extends AppCompatActivity {
                 Intent intent = new Intent(Creat_user.this,Check_user_doc.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                //finish();
+                finish();
             }
         });
 

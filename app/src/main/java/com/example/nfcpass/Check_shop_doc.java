@@ -26,7 +26,6 @@ public class Check_shop_doc extends AppCompatActivity {
     EditText et_BusinessDate;
     Button btn_BusinessData;
 
-    //실행88888
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

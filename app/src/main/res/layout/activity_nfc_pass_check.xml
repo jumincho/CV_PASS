@@ -10,6 +10,23 @@
 
 
     <LinearLayout
+        android:id="@+id/change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/changebutton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_cached_24"
+            android:background="@android:color/transparent"
+            android:text="Button" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/user_mode"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

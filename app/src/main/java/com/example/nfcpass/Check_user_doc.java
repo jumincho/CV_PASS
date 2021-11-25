@@ -38,7 +38,9 @@ import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -80,14 +82,19 @@ public class Check_user_doc extends AppCompatActivity {
         user_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(check_edit_name.getText().toString().equals("") || openday1.getText().toString().equals("") && openday1.getText().toString().length() == 10)) {
+                if (!(check_edit_name.getText().toString().equals("")) && !(openday1.getText().toString().equals("")) && openday1.getText().toString().length() == 11) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Check_user_doc.this);
                     builder
                             .setMessage("인증서 사진을 불러와주세요.")
                             .setPositiveButton("사진 선택", (dialog, which) -> startGalleryChooser());
                     builder.create().show();
+                    try {
+                        saveUserDate(check_edit_name.getText().toString(),Integer.parseInt(openday1.getText().toString()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                else if(openday1.getText().toString().length() != 10){
+                else if(openday1.getText().toString().length() != 11){
                     Toast.makeText(Check_user_doc.this,"올바른 번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -153,6 +160,7 @@ public class Check_user_doc extends AppCompatActivity {
 
                 callCloudVision(bitmap);
                 mMainImage.setImageBitmap(bitmap);//올려놓은 사진의 bitmap 설정해줌
+                Log.i("Workout", uri.toString());
             } catch (IOException e) {
                 Log.d(TAG, "Image picking failed because " + e.getMessage());
                 Toast.makeText(this, "Something is wrong with that image. Pick a different one please.", Toast.LENGTH_LONG).show();
@@ -308,7 +316,7 @@ public class Check_user_doc extends AppCompatActivity {
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 cnt++;
-                if(label.getDescription().equals("1")||label.getDescription().equals("2")){//접종 차수 확인
+                if(label.getDescription().equals("1")||label.getDescription().equals("2")){
                     if(labels.get(cnt).getDescription().equals("차")){
                         Vtry = label.getDescription() + labels.get(cnt).getDescription();
                     }
@@ -323,11 +331,12 @@ public class Check_user_doc extends AppCompatActivity {
                     }
                 }
             }
+
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
                 Intent intent = new Intent(context, Nfc_pass_check.class);
                 intent.putExtra("백신", Vtry);
                 intent.putExtra("인증", Vday);
-               context.startActivity(intent);
+                context.startActivity(intent);
             }else {
                         notifi notifis = new notifi();
                         notifis.start();
@@ -374,6 +383,17 @@ public class Check_user_doc extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void saveUserDate(String name, int number) throws IOException {
+        FileOutputStream fos = openFileOutput("UserDate.dat",MODE_PRIVATE);
+        DataOutputStream dos = new DataOutputStream(fos); //데이터를 쓴다.
+        dos.writeInt(number);
+        dos.writeUTF(name);
+        dos.flush();
+        dos.close();
+
+
     }
 
 }
