@@ -23,18 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -153,7 +142,7 @@ public class Nfc_pass_check extends Activity {
     }
     private void buildTagViews(NdefMessage[] msgs) {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         if (msgs == null || msgs.length == 0) return;
 
@@ -169,6 +158,7 @@ public class Nfc_pass_check extends Activity {
         }
 
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
         if(check.equals("2")||check.equals("3")) {
@@ -186,7 +176,7 @@ public class Nfc_pass_check extends Activity {
             userdate.put("시간",time);
 
 
-            db.collection("사업장").document("후생관").collection(todaytime).document(name).set(userdate);
+           // db.collection("사업장").document("후생관").collection(todaytime).document(name).set(userdate);
             //UUID를 사용하여 이름에 더하여 동명이인 방지 및 여러번 입장 체크
 
 
@@ -197,7 +187,7 @@ public class Nfc_pass_check extends Activity {
             tts.speak("기록이 완료 되었습니다.", TextToSpeech.QUEUE_FLUSH, null);
             Toast.makeText(this,"기록이 완료 되었습니다",Toast.LENGTH_LONG).show();
 
-            db.collection("사업장").document("이마트");
+         //   db.collection("사업장").document("이마트");
         }
     }
 
