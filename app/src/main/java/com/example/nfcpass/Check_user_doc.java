@@ -341,7 +341,7 @@ public class Check_user_doc extends AppCompatActivity {
                     if(Vday.equals("접")){//2차 접종시
                         Vday = labels.get(cnt+2).getDescription().substring(0,labels.get(cnt+2).getDescription().length()-1);
                     }
-                }
+                }///
             }
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
                 Intent intent = new Intent(context, Nfc_pass_check.class);
