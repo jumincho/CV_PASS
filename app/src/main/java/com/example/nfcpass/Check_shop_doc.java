@@ -45,9 +45,9 @@ public class Check_shop_doc extends AppCompatActivity {
         btn_BusinessData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String numberData = (et_BusinessNumber_1.getText().toString() + et_BusinessNumber_2.getText().toString() + et_BusinessNumber_3.getText().toString());
-                String nameData = et_BusinessName.getText().toString();
-                String dateData = et_BusinessDate.getText().toString();
+                String numberData = (et_BusinessNumber_1.getText().toString().trim() + et_BusinessNumber_2.getText().toString().trim() + et_BusinessNumber_3.getText().toString().trim());
+                String nameData = et_BusinessName.getText().toString().trim();
+                String dateData = et_BusinessDate.getText().toString().trim();
 
                 if(numberData.equals("") || nameData.equals("") || dateData.equals("")) {
                     Toast.makeText(Check_shop_doc.this,"올바른 값을 입력해주세요.", Toast.LENGTH_SHORT).show();

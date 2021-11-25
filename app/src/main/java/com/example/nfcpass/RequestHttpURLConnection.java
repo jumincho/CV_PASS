@@ -1,7 +1,5 @@
 package com.example.nfcpass;
 
-import android.content.ContentValues;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public class RequestHttpURLConnection {
 
@@ -48,7 +44,6 @@ public class RequestHttpURLConnection {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //JSON 보내는 Output stream
         return null;
 
     }
