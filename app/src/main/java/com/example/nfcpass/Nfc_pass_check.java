@@ -59,7 +59,7 @@ public class Nfc_pass_check extends Activity {
     String name,shop_num,shop_name,Vtry,Vday;
     TextView va_count,user_check_day;
     ImageButton imageButton;
-    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
 
 
 
@@ -162,8 +162,9 @@ public class Nfc_pass_check extends Activity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 vibrator.cancel();
-                Intent intent1 = new Intent();
+                Intent intent1 = new Intent(Nfc_pass_check.this,Creat_user.class);
                 startActivity(intent1);
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 finish();
@@ -327,7 +328,7 @@ public class Nfc_pass_check extends Activity {
 
 
     class writeTag extends Thread {
-
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         String shopname;
 
 

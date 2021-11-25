@@ -2,6 +2,7 @@ package com.example.nfcpass;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -25,6 +26,7 @@ public class Check_shop_doc extends AppCompatActivity {
     EditText et_BusinessName;
     EditText et_BusinessDate;
     Button btn_BusinessData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,7 @@
 package com.example.nfcpass;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -61,6 +63,7 @@ public class Check_user_doc extends AppCompatActivity {
     public static final int CAMERA_IMAGE_REQUEST = 3;
     private static Context context;
     private static TextView noti;
+    ProgressDialog dialog2;
 
     ImageView mMainImage;
     Button user_check;
@@ -151,6 +154,14 @@ public class Check_user_doc extends AppCompatActivity {
 
     public void uploadImage(Uri uri) {
         if (uri != null) {
+            dialog2 = new ProgressDialog(Check_user_doc.this);
+            dialog2.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            dialog2.setCancelable(false);
+            dialog2.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog2.setMessage("확인중");
+            dialog2.show();
+
             try {
                 // scale the image to save on bandwidth
                 Bitmap bitmap =
@@ -307,7 +318,7 @@ public class Check_user_doc extends AppCompatActivity {
         return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false);
     }
 
-    private String convertResponseToString(BatchAnnotateImagesResponse response) {
+    private String convertResponseToString(BatchAnnotateImagesResponse response) throws IOException {
 
         StringBuilder message = new StringBuilder("I found these things:\n\n");
         int cnt = 0;
@@ -333,11 +344,14 @@ public class Check_user_doc extends AppCompatActivity {
             }
 
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
+                dialog2.dismiss();
                 Intent intent = new Intent(context, Nfc_pass_check.class);
                 intent.putExtra("백신", Vtry);
                 intent.putExtra("인증", Vday);
+                saveUserDatevac(Vtry,Vday);
                 context.startActivity(intent);
             }else {
+                        dialog2.dismiss();
                         notifi notifis = new notifi();
                         notifis.start();
 
@@ -390,6 +404,17 @@ public class Check_user_doc extends AppCompatActivity {
         DataOutputStream dos = new DataOutputStream(fos); //데이터를 쓴다.
         dos.writeInt(number);
         dos.writeUTF(name);
+        dos.flush();
+        dos.close();
+
+
+    }
+
+    public void saveUserDatevac(String vtry, String vname) throws IOException {
+        FileOutputStream fos = openFileOutput("UserDatevac.dat",MODE_PRIVATE);
+        DataOutputStream dos = new DataOutputStream(fos); //데이터를 쓴다.
+        dos.writeUTF(vtry);
+        dos.writeUTF(vname);
         dos.flush();
         dos.close();
 
