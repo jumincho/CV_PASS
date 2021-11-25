@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Check_shop_doc extends AppCompatActivity {
 
@@ -45,17 +46,22 @@ public class Check_shop_doc extends AppCompatActivity {
                 String nameData = et_BusinessName.getText().toString();
                 String dateData = et_BusinessDate.getText().toString();
 
-
-                String url = "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=EEA0ZjjFdim30KlXr7%2FroJJf6LBMusuAISvO9ET5leSjtUIivRhW%2F4g%2FOJlqTXSodVTOQKY8BN%2B05S9qRzpRjg%3D%3D";
-                String jsonData = "{  \"businesses\": [    {      \"b_no\": \""
-                        + numberData + "\",      \"start_dt\": \""
-                        + dateData + "\",      \"p_nm\": \""
-                        + nameData +"\",      \"p_nm2\": \"\",      \"b_nm\": \"\",      \"corp_no\": \"\",      \"b_sector\": \"\",      \"b_type\": \"\"    }  ]}";
+                if(numberData.equals("") || nameData.equals("") || dateData.equals("")) {
+                    Toast.makeText(Check_shop_doc.this,"올바른 값을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else {
 
 
-                // AsyncTask를 통해 HttpURLConnection 수행.
-                NetworkTask networkTask = new NetworkTask(url, jsonData);
-                networkTask.execute();
+                    String url = "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=EEA0ZjjFdim30KlXr7%2FroJJf6LBMusuAISvO9ET5leSjtUIivRhW%2F4g%2FOJlqTXSodVTOQKY8BN%2B05S9qRzpRjg%3D%3D";
+                    String jsonData = "{  \"businesses\": [    {      \"b_no\": \""
+                            + numberData + "\",      \"start_dt\": \""
+                            + dateData + "\",      \"p_nm\": \""
+                            + nameData + "\",      \"p_nm2\": \"\",      \"b_nm\": \"\",      \"corp_no\": \"\",      \"b_sector\": \"\",      \"b_type\": \"\"    }  ]}";
+
+
+                    // AsyncTask를 통해 HttpURLConnection 수행.
+                    NetworkTask networkTask = new NetworkTask(url, jsonData);
+                    networkTask.execute();
+                }
 
             }
         });
@@ -88,9 +94,13 @@ public class Check_shop_doc extends AppCompatActivity {
             super.onPostExecute(s);
 
             DataParser dataParser = new DataParser(s);
-            resultName = dataParser.getName();
-            resultNumber = dataParser.getNo();
-        }
+            if(dataParser.getValid().equals("02")){
+                Toast.makeText(Check_shop_doc.this,"확인할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }else {
+                resultName = dataParser.getName();
+                resultNumber = dataParser.getNo();
+            }
+         }
     }
 
     @Override
