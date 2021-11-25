@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Check_user_doc extends AppCompatActivity {
     private static final String CLOUD_VISION_API_KEY = BuildConfig.API_KEY;
@@ -302,12 +301,23 @@ public class Check_user_doc extends AppCompatActivity {
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
         StringBuilder message = new StringBuilder("I found these things:\n\n");
-
+        int cnt = 0;
+        String Vtry, Vday;
         List<EntityAnnotation> labels = response.getResponses().get(0).getTextAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
-                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription())); // 출력 부
-                message.append("\n");
+                cnt++;
+                if(label.getDescription().equals("1")||label.getDescription().equals("2")){
+                    if(labels.get(cnt).equals("차")){
+                        Vtry = label.getDescription() + labels.get(cnt).getDescription();
+                        Log.i("Workout", Vtry);
+                    }
+                }
+                if(label.getDescription().equals("일자")){
+                    Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1);
+                    Log.i("Workout", Vday);
+                }
+
             }
         } else {
             message.append("nothing");
