@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
@@ -106,22 +104,11 @@ public class Check_user_doc extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select a photo"),
                     GALLERY_IMAGE_REQUEST);
+            if(Intent.ACTION_GET_CONTENT)
+            Log.i("Workout",);
         }
     }
 
-    public void startCamera(){
-        if(PermissionUtils.requestPermission(
-                this,
-                CAMERA_PERMISSIONS_REQUEST,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA)){
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
-        }
-    }
 
     public File getCameraFile(){
         File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -145,11 +132,6 @@ public class Check_user_doc extends AppCompatActivity {
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case CAMERA_PERMISSIONS_REQUEST:
-                if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSIONS_REQUEST, grantResults)) {
-                    startCamera();
-                }
-                break;
             case GALLERY_PERMISSIONS_REQUEST:
                 if (PermissionUtils.permissionGranted(requestCode, GALLERY_PERMISSIONS_REQUEST, grantResults)) {
                     startGalleryChooser();
@@ -328,10 +310,12 @@ public class Check_user_doc extends AppCompatActivity {
                 if(label.getDescription().equals("1")){
                     if(labels.get(cnt).getDescription().equals("차")){
                         Vtry = label.getDescription() + labels.get(cnt).getDescription();
+                        Log.i("Workout", Vtry);
                     }
                 }
                 if(label.getDescription().equals("일자")){
                     Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1);
+                    Log.i("Workout", Vday);
                 }
 
             }
@@ -339,7 +323,7 @@ public class Check_user_doc extends AppCompatActivity {
             Intent intent = new Intent(context,Nfc_pass_check.class);
             intent.putExtra("백신",Vtry);
             intent.putExtra("인증",Vday);
-            context.startActivity(intent);
+           // context.startActivity(intent);
         } else {
             message.append("nothing");
         }
