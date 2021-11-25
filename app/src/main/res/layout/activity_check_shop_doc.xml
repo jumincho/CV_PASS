@@ -39,6 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <TextView
@@ -50,17 +52,20 @@
             android:text="이름 : " />
 
         <EditText
-            android:id="@+id/edit_name"
+            android:id="@+id/et_BusinessName"
             android:layout_width="match_parent"
             android:layout_marginBottom="5dp"
             android:singleLine="true"
-            android:hint="홍길동"
+            android:hint="이름을 입력해주세요."
+            android:gravity="center"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <TextView
@@ -72,11 +77,13 @@
             android:text="개업일자 : " />
 
         <EditText
-            android:id="@+id/openday"
+            android:id="@+id/et_BusinessDate"
             android:layout_width="match_parent"
             android:layout_marginBottom="5dp"
             android:inputType="number"
-            android:hint="20211123"
+            android:hint="YYYYMMDD"
+            android:maxLength="8"
+            android:gravity="center"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
@@ -88,7 +95,7 @@
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/gmsansmid"
         android:gravity="center"
-        android:text="문서 번호"
+        android:text="사업자 번호"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
@@ -99,7 +106,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/shop_doc_1_input"
+            android:id="@+id/et_BusinessNumber_1"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -107,6 +114,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center"
+            android:inputType="number"
             android:maxLength="6" />
 
         <TextView
@@ -121,7 +129,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/shop_doc_2_input"
+            android:id="@+id/et_BusinessNumber_2"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -129,7 +137,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center"
-
+            android:inputType="number"
             android:maxLength="6" />
 
         <TextView
@@ -144,7 +152,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/shop_doc_3_input"
+            android:id="@+id/et_BusinessNumber_3"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -152,12 +160,13 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center"
+            android:inputType="number"
             android:maxLength="6" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/shop_check"
+        android:id="@+id/btn_BusinessData"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -166,6 +175,5 @@
         android:text="인증"
         android:textStyle="bold"
         />
-
 
 </LinearLayout>

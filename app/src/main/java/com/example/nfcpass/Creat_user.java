@@ -16,8 +16,8 @@ public class Creat_user extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creat_user);
 
-        go_user = findViewById(R.id.go_user);
-        go_shop = findViewById(R.id.go_shop);
+        go_user = (Button) findViewById(R.id.go_user);
+        go_shop = (Button) findViewById(R.id.go_shop);
 
 
         go_user.setOnClickListener(new View.OnClickListener() {

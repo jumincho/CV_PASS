@@ -86,6 +86,7 @@
             android:inputType="number"
             android:gravity="center"
             android:hint="010XXXXAAAA"
+            android:maxLength="11"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
