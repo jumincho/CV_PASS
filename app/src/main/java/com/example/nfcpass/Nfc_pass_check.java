@@ -17,14 +17,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -49,6 +52,8 @@ public class Nfc_pass_check extends Activity {
     SimpleDateFormat mtimeformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     SimpleDateFormat todaynowformat = new SimpleDateFormat("yyyy-MM-dd");
     String time,todaytime;
+    int number;
+    String name;
 
 
 
@@ -100,6 +105,7 @@ public class Nfc_pass_check extends Activity {
 
 
 
+
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             // Stop here, we definitely need NFC
@@ -116,7 +122,11 @@ public class Nfc_pass_check extends Activity {
         mtoday = new Date(todaynow);
         todaytime = todaynowformat.format(mtoday);
 
-
+        try {
+            readUserDate();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         readFromIntent(getIntent());
 
 
@@ -174,9 +184,9 @@ public class Nfc_pass_check extends Activity {
             vibrator.vibrate(a,-1); // 0.5초간 진동
             Toast.makeText(this,"입장이 완료 되었습니다.",Toast.LENGTH_LONG).show();
 
-            String name = "김영희";
+            String user_name = name;
             Map<String,Object> userdate = new HashMap<>();
-            userdate.put("전화번호","010-1111-2222");
+            userdate.put("전화번호","0"+String.valueOf(number));
             userdate.put("시간",time);
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -310,5 +320,14 @@ public class Nfc_pass_check extends Activity {
                 }
             }
         }
+    }
+
+
+    public void readUserDate() throws IOException {
+        FileInputStream fis = openFileInput("UserDate.dat");
+        DataInputStream dis = new DataInputStream(fis);
+        number = dis.readInt();
+        name = dis.readUTF();
+        dis.close();
     }
 }
