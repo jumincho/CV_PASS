@@ -1,6 +1,7 @@
 package com.example.nfcpass;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -55,9 +56,11 @@ public class Check_user_doc extends AppCompatActivity {
     private static final int GALLERY_IMAGE_REQUEST = 1;
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
     public static final int CAMERA_IMAGE_REQUEST = 3;
+    private static Context context;
 
     TextView mImageDetails;
     ImageView mMainImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class Check_user_doc extends AppCompatActivity {
                     .setNegativeButton("Camera", (dialog, which) -> startCamera());
             builder.create().show();
         });
+
+        context = this;
 
     }
 
@@ -319,6 +324,9 @@ public class Check_user_doc extends AppCompatActivity {
                 }
 
             }
+
+            Intent intent = new Intent(context,Nfc_pass_check.class);
+            context.startActivity(intent);
         } else {
             message.append("nothing");
         }
