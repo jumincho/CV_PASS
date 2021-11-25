@@ -11,6 +11,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,8 +60,9 @@ public class Check_user_doc extends AppCompatActivity {
     public static final int CAMERA_IMAGE_REQUEST = 3;
     private static Context context;
 
-    TextView mImageDetails;
     ImageView mMainImage;
+    Button user_check;
+    EditText check_edit_name , openday1;
 
 
     @Override
@@ -67,19 +70,30 @@ public class Check_user_doc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_user_doc);
 
-        mImageDetails = findViewById(R.id.textView);
         mMainImage = findViewById(R.id.imageView);
+        user_check = findViewById(R.id.user_check);
+        check_edit_name = findViewById(R.id.check_edit_name);
+        openday1 = findViewById(R.id.openday1);
 
-
-        FloatingActionButton fab = findViewById(R.id.floatingActionButton);
-        fab.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(Check_user_doc.this);
-            builder
-                    .setMessage("Choose a picture")
-                    .setPositiveButton("Galley", (dialog, which) -> startGalleryChooser())
-                    .setNegativeButton("Camera", (dialog, which) -> startCamera());
-            builder.create().show();
+        user_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!(check_edit_name.getText().toString().equals("") || openday1.getText().toString().equals("") || openday1.getText().toString().length() == 10)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Check_user_doc.this);
+                    builder
+                            .setMessage("인증서 사진을 불러와주세요.")
+                            .setPositiveButton("사진 선택", (dialog, which) -> startGalleryChooser());
+                    builder.create().show();
+                }
+                else if(openday1.getText().toString().length() != 10){
+                    Toast.makeText(Check_user_doc.this,"올바른 번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(Check_user_doc.this,"이름과 번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+                }
+            }
         });
+
 
         context = this;
 
@@ -235,7 +249,7 @@ public class Check_user_doc extends AppCompatActivity {
 
     private void callCloudVision(final Bitmap bitmap) {
         // Switch text to loading
-        mImageDetails.setText("Loading_Message");
+
 
         // Do the real work in an async task, because we need to use the network anyway
         try {
@@ -277,8 +291,6 @@ public class Check_user_doc extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Check_user_doc activity = Check_UserWeakReference.get();
             if (activity != null && !activity.isFinishing()) {
-                TextView imageDetail = activity.findViewById(R.id.textView);
-                imageDetail.setText(result);
             }
         }
     }
@@ -305,9 +317,10 @@ public class Check_user_doc extends AppCompatActivity {
     }
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
+
         StringBuilder message = new StringBuilder("I found these things:\n\n");
         int cnt = 0;
-        String Vtry, Vday;
+        String Vtry = "", Vday = "";
         List<EntityAnnotation> labels = response.getResponses().get(0).getTextAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
@@ -315,17 +328,17 @@ public class Check_user_doc extends AppCompatActivity {
                 if(label.getDescription().equals("1")){
                     if(labels.get(cnt).getDescription().equals("차")){
                         Vtry = label.getDescription() + labels.get(cnt).getDescription();
-                        Log.i("Workout", Vtry);
                     }
                 }
                 if(label.getDescription().equals("일자")){
                     Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1);
-                    Log.i("Workout", Vday);
                 }
 
             }
 
             Intent intent = new Intent(context,Nfc_pass_check.class);
+            intent.putExtra("백신",Vtry);
+            intent.putExtra("인증",Vday);
             context.startActivity(intent);
         } else {
             message.append("nothing");

@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -50,11 +49,13 @@ public class Nfc_pass_check extends Activity {
     SimpleDateFormat todaynowformat = new SimpleDateFormat("yyyy-MM-dd");
     String time,todaytime;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc_pass_check);
         context = this;
+
 
         shop_mode = findViewById(R.id.shop_mode);
         user_mode = findViewById(R.id.user_mode);
@@ -140,9 +141,13 @@ public class Nfc_pass_check extends Activity {
             buildTagViews(msgs);
         }
     }
+
+
+
     private void buildTagViews(NdefMessage[] msgs) {
 
-        //FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
 
         if (msgs == null || msgs.length == 0) return;
 
@@ -158,9 +163,6 @@ public class Nfc_pass_check extends Activity {
         }
 
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
         if(check.equals("2")||check.equals("3")) {
             tts.setPitch(0.3f);
             tts.setSpeechRate(2.5f);
@@ -170,13 +172,14 @@ public class Nfc_pass_check extends Activity {
             vibrator.vibrate(a,-1); // 0.5초간 진동
             Toast.makeText(this,"입장이 완료 되었습니다.",Toast.LENGTH_LONG).show();
 
-            String name = "조주민";
+            String name = "김영희";
             Map<String,Object> userdate = new HashMap<>();
-            userdate.put("전화번호","010-5602-3622");
+            userdate.put("전화번호","010-1111-2222");
             userdate.put("시간",time);
 
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-           // db.collection("사업장").document("후생관").collection(todaytime).document(name).set(userdate);
+            db.collection("사업장").document("후생관").collection(todaytime).document(name).set(userdate);
             //UUID를 사용하여 이름에 더하여 동명이인 방지 및 여러번 입장 체크
 
 
