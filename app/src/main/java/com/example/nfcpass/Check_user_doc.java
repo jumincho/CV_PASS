@@ -323,7 +323,7 @@ public class Check_user_doc extends AppCompatActivity {
                         }
                     }
                 }
-            }
+            }//섹스섹스스섹스섹스
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
                 Intent intent = new Intent(context, Nfc_pass_check.class);
                 intent.putExtra("백신", Vtry);
