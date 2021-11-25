@@ -337,21 +337,18 @@ public class Check_user_doc extends AppCompatActivity {
                     }
                 }
                 if(label.getDescription().equals("일자")){
-                    Vday = labels.get(cnt+1).getDescription().substring(0,labels.get(cnt).getDescription().length()-1);
+                    Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1); //1차접종시
+                    if(Vday.equals("접")){//2차 접종시
+                        Vday = labels.get(cnt+2).getDescription().substring(0,labels.get(cnt+2).getDescription().length()-1);
+                    }
                 }
-                Log.i("내용3",label.getDescription());
-
             }
             if(!(Vtry.equals("3")) && !(Vday.equals("3"))) {
-                Log.i("내용1",Vtry);
-                Log.i("내용2",Vday);
                 Intent intent = new Intent(context, Nfc_pass_check.class);
                 intent.putExtra("백신", Vtry);
                 intent.putExtra("인증", Vday);
                 context.startActivity(intent);
             }else {
-                Log.i("내용1",Vtry);
-                Log.i("내용2",Vday);
                         notifi notifis = new notifi();
                         notifis.start();
 
