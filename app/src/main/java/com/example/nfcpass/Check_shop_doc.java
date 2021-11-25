@@ -2,18 +2,14 @@ package com.example.nfcpass;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class Check_shop_doc extends AppCompatActivity {
-    //정환이가 쓸 변수
     String resultName;
     String resultNumber;
 
@@ -24,11 +20,9 @@ public class Check_shop_doc extends AppCompatActivity {
     EditText et_BusinessName;
     EditText et_BusinessDate;
     Button btn_BusinessData;
-    TextView tv_TextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("호출", "1");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_shop_doc);
 
@@ -38,7 +32,6 @@ public class Check_shop_doc extends AppCompatActivity {
         et_BusinessName = (EditText) findViewById(R.id.et_BusinessName);
         et_BusinessDate = (EditText) findViewById(R.id.et_BusinessDate);
         btn_BusinessData = (Button) findViewById(R.id.btn_BusinessData);
-        tv_TextView = (TextView) findViewById(R.id.textView);
 
         btn_BusinessData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,18 +40,20 @@ public class Check_shop_doc extends AppCompatActivity {
                 String nameData = et_BusinessName.getText().toString();
                 String dateData = et_BusinessDate.getText().toString();
 
+                if(numberData.equals("") || nameData.equals("") || dateData.equals("")) {
+                    Toast.makeText(Check_shop_doc.this,"올바른 값을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else{
+                    String url = "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=EEA0ZjjFdim30KlXr7%2FroJJf6LBMusuAISvO9ET5leSjtUIivRhW%2F4g%2FOJlqTXSodVTOQKY8BN%2B05S9qRzpRjg%3D%3D";
+                    String jsonData = "{  \"businesses\": [    {      \"b_no\": \""
+                            + numberData + "\",      \"start_dt\": \""
+                            + dateData + "\",      \"p_nm\": \""
+                            + nameData +"\",      \"p_nm2\": \"\",      \"b_nm\": \"\",      \"corp_no\": \"\",      \"b_sector\": \"\",      \"b_type\": \"\"    }  ]}";
 
-                String url = "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=EEA0ZjjFdim30KlXr7%2FroJJf6LBMusuAISvO9ET5leSjtUIivRhW%2F4g%2FOJlqTXSodVTOQKY8BN%2B05S9qRzpRjg%3D%3D";
-                String jsonData = "{  \"businesses\": [    {      \"b_no\": \""
-                        + numberData + "\",      \"start_dt\": \""
-                        + dateData + "\",      \"p_nm\": \""
-                        + nameData +"\",      \"p_nm2\": \"\",      \"b_nm\": \"\",      \"corp_no\": \"\",      \"b_sector\": \"\",      \"b_type\": \"\"    }  ]}";
 
-
-                // AsyncTask를 통해 HttpURLConnection 수행.
-                NetworkTask networkTask = new NetworkTask(url, jsonData);
-                networkTask.execute();
-
+                    // AsyncTask를 통해 HttpURLConnection 수행.
+                    NetworkTask networkTask = new NetworkTask(url, jsonData);
+                    networkTask.execute();
+                }
             }
         });
     }
@@ -73,30 +68,31 @@ public class Check_shop_doc extends AppCompatActivity {
 
             this.url = url;
             this.jsonData = jsonData;
-            Log.i("호출", "jsonData: " + this.jsonData);
         }
 
         @Override
         protected String doInBackground(Void... params) {
-            Log.i("호출", "doInBackground");
+
             String result; // 요청 결과를 저장할 변수.
 
             RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
             result = requestHttpURLConnection.request(url, jsonData);
 
-            Log.i("호출", "result: " + result);
             return result;
         }
 
         @Override
         protected void onPostExecute(String s) {
-            Log.i("호출", "onPostExecute");
             super.onPostExecute(s);
 
             DataParser dataParser = new DataParser(s);
-            tv_TextView.setText(dataParser.getNo());
-            resultName = dataParser.getName();
-            resultNumber = dataParser.getNo();
+
+            if(dataParser.getValid().equals("02")){
+                Toast.makeText(Check_shop_doc.this,"확인할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }else {
+                resultName = dataParser.getName();
+                resultNumber = dataParser.getNo();
+            }
         }
     }
 

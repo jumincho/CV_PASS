@@ -51,7 +51,6 @@
 
         <EditText
             android:id="@+id/et_BusinessName"
-            android:text="이정환"
             android:layout_width="match_parent"
             android:layout_marginBottom="5dp"
             android:singleLine="true"
@@ -74,7 +73,6 @@
 
         <EditText
             android:id="@+id/et_BusinessDate"
-            android:text="20201109"
             android:layout_width="match_parent"
             android:layout_marginBottom="5dp"
             android:inputType="number"
@@ -102,7 +100,6 @@
 
         <EditText
             android:id="@+id/et_BusinessNumber_1"
-            android:text="402"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -125,7 +122,6 @@
 
         <EditText
             android:id="@+id/et_BusinessNumber_2"
-            android:text="35"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -149,7 +145,6 @@
 
         <EditText
             android:id="@+id/et_BusinessNumber_3"
-            android:text="05727"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -171,11 +166,5 @@
         android:text="인증"
         android:textStyle="bold"
         />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="335dp"/>
-
 
 </LinearLayout>

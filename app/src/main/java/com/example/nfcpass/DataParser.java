@@ -1,8 +1,5 @@
 package com.example.nfcpass;
 
-
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +9,7 @@ public class DataParser {
     String b_no;
     String b_name;
     String b_date;
-
+    String valid;
     public DataParser(String b_data){
         this.b_data = b_data;
         b_dataParser();
@@ -25,7 +22,7 @@ public class DataParser {
             JSONArray jsonArray = jsonObj.getJSONArray("data");
             JSONObject jsonObjData = jsonArray.getJSONObject(0);
             this.b_no = jsonObjData.getString("b_no");
-            Log.i("호출", "사업자 번호 : " + b_no);
+            this.valid = jsonObjData.getString("valid");
             this.b_name = jsonObjData.getString("b_name");
             this.b_date = jsonObjData.getString("b_date");
         } catch (JSONException e) {
@@ -43,5 +40,9 @@ public class DataParser {
 
     public String getDate(){
         return this.b_date;
+    }
+
+    public String getValid(){
+        return this.valid;
     }
 }
