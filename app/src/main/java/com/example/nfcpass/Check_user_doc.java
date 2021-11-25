@@ -111,19 +111,6 @@ public class Check_user_doc extends AppCompatActivity {
         }
     }
 
-    public void startCamera(){
-        if(PermissionUtils.requestPermission(
-                this,
-                CAMERA_PERMISSIONS_REQUEST,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA)){
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
-        }
-    }
 
     public File getCameraFile(){
         File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -147,11 +134,6 @@ public class Check_user_doc extends AppCompatActivity {
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case CAMERA_PERMISSIONS_REQUEST:
-                if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSIONS_REQUEST, grantResults)) {
-                    startCamera();
-                }
-                break;
             case GALLERY_PERMISSIONS_REQUEST:
                 if (PermissionUtils.permissionGranted(requestCode, GALLERY_PERMISSIONS_REQUEST, grantResults)) {
                     startGalleryChooser();
@@ -171,7 +153,7 @@ public class Check_user_doc extends AppCompatActivity {
 
                 callCloudVision(bitmap);
                 mMainImage.setImageBitmap(bitmap);//올려놓은 사진의 bitmap 설정해줌
-
+                Log.i("Workout", uri.toString());
             } catch (IOException e) {
                 Log.d(TAG, "Image picking failed because " + e.getMessage());
                 Toast.makeText(this, "Something is wrong with that image. Pick a different one please.", Toast.LENGTH_LONG).show();
@@ -336,6 +318,9 @@ public class Check_user_doc extends AppCompatActivity {
                     Vday = labels.get(cnt).getDescription().substring(0,labels.get(cnt).getDescription().length()-1); //1차접종시
                     if(Vday.equals("접")){//2차 접종시
                         Vday = labels.get(cnt+2).getDescription().substring(0,labels.get(cnt+2).getDescription().length()-1);
+                        if(Vday.equals("1")){//2차 접종 후 14일 경과시
+                            Vday = labels.get(cnt+5).getDescription().substring(0,labels.get(cnt+5).getDescription().length()-1);
+                        }
                     }
                 }
             }
@@ -343,7 +328,7 @@ public class Check_user_doc extends AppCompatActivity {
                 Intent intent = new Intent(context, Nfc_pass_check.class);
                 intent.putExtra("백신", Vtry);
                 intent.putExtra("인증", Vday);
-                context.startActivity(intent);
+               // context.startActivity(intent);
             }else {
                         notifi notifis = new notifi();
                         notifis.start();
