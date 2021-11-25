@@ -307,8 +307,8 @@ public class Check_user_doc extends AppCompatActivity {
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 cnt++;
-                if(label.getDescription().equals("1")||label.getDescription().equals("2")){
-                    if(labels.get(cnt).equals("차")){
+                if(label.getDescription().equals("1")){
+                    if(labels.get(cnt).getDescription().equals("차")){
                         Vtry = label.getDescription() + labels.get(cnt).getDescription();
                         Log.i("Workout", Vtry);
                     }
