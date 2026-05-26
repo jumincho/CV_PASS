@@ -68,7 +68,8 @@ cv_pass/
 │           ├── layout/                     # 액티비티 레이아웃
 │           ├── drawable/                   # 벡터 / 비트맵 자원
 │           └── values/                     # strings, colors, themes
-├── CV_PASS.pptx                            # 작품경진대회 발표 자료
+├── docs/
+│   └── presentation.pptx                   # 작품경진대회 발표 자료
 ├── build.gradle
 └── settings.gradle
 ```
@@ -91,7 +92,7 @@ cv_pass/
 ## 발표 자료
 
 - 시연 영상 : [YouTube — 2021 전북대 컴공 작품경진대회](https://www.youtube.com/watch?v=LHE4dr8aTKQ&list=PLFAjt9goCKzyHfSKoV9AnDuxl1U9w1mLL&index=13)
-- 발표 슬라이드 : [`CV_PASS.pptx`](./CV_PASS.pptx)
+- 발표 슬라이드 : [`docs/presentation.pptx`](./docs/presentation.pptx)
 
 ## 스크린샷
 
