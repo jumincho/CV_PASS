@@ -90,20 +90,9 @@ covid-pass-nfc/
 > Firebase `google-services.json`, Cloud Vision API 키가 제거되어 있습니다.
 > 직접 빌드하려면 자신의 Firebase 프로젝트와 API 키를 채워 넣어야 합니다.
 
-## 보안 주의사항
+## 시크릿 처리
 
-> [!IMPORTANT]
-> 초기 커밋들의 git history에는 다음 4개 시크릿이 평문으로 포함된 적이 있어
-> 발급 기관에서 회전(rotate) 처리가 필요합니다.
->
-> | 시크릿 | 노출된 값 (prefix) | 발급 기관 |
-> | --- | --- | --- |
-> | Cloud Vision API key | `AIzaSyAXpv-...` | GCP 콘솔 → API 및 서비스 → 사용자 인증 정보 |
-> | Firebase API key | `AIzaSyAgyb...` | Firebase 콘솔 → 프로젝트 설정 |
-> | odcloud 사업자조회 serviceKey | `EEA0ZjjF...` | 공공데이터포털 |
-> | 조사관 코드 (클라이언트 비밀번호) | `112255` | 운영 규칙 — 더 강한 코드로 |
-
-빌드 시스템은 `local.properties`에서 다음 키들을 읽어 `BuildConfig`로 주입하며,
+빌드 시스템은 `local.properties`에서 다음 키를 읽어 `BuildConfig`로 주입하며,
 키 문자열은 소스에 포함되지 않습니다.
 
 | `local.properties` 키 | `BuildConfig` 필드 | 사용처 |
@@ -209,21 +198,10 @@ This project received the **silver award at the 2021 JBNU CS Capstone Showcase**
 - **Web parsing**: Jsoup 1.14.3
 - **NFC**: `android.nfc.NfcAdapter` (NDEF)
 
-### Security Notes
-
-> [!IMPORTANT]
-> Four secrets appeared in cleartext in earlier commits and need rotation
-> at their respective consoles.
->
-> | Secret | Leaked prefix | Where to rotate |
-> | --- | --- | --- |
-> | Cloud Vision API key | `AIzaSyAXpv-...` | GCP Console → APIs & Services → Credentials |
-> | Firebase API key | `AIzaSyAgyb...` | Firebase Console → Project Settings |
-> | odcloud serviceKey | `EEA0ZjjF...` | Korea Public Data Portal |
-> | Inspector code | `112255` | Operations policy — use a stronger code |
+### Secrets handling
 
 The build system reads keys from `local.properties` and injects them via
-`BuildConfig`, so no secrets are present in source.
+`BuildConfig`; no secrets are present in source.
 
 | `local.properties` key | `BuildConfig` field | Use site |
 | --- | --- | --- |
