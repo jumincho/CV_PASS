@@ -93,9 +93,8 @@ covid-pass-nfc/
 ## 보안 주의사항
 
 > [!IMPORTANT]
-> **이전 머지된 커밋의 git history에 다음 4개 시크릿이 평문으로 노출되었습니다.**
-> 모두 즉시 발급 기관에서 회전(rotate)·재발급해 주세요. 본 PR의 소스 코드에서는
-> 모두 placeholder / `BuildConfig`로 가렸지만, 과거 커밋에는 그대로 남아 있습니다.
+> 초기 커밋들의 git history에는 다음 4개 시크릿이 평문으로 포함된 적이 있어
+> 발급 기관에서 회전(rotate) 처리가 필요합니다.
 >
 > | 시크릿 | 노출된 값 (prefix) | 발급 기관 |
 > | --- | --- | --- |
@@ -104,8 +103,8 @@ covid-pass-nfc/
 > | odcloud 사업자조회 serviceKey | `EEA0ZjjF...` | 공공데이터포털 |
 > | 조사관 코드 (클라이언트 비밀번호) | `112255` | 운영 규칙 — 더 강한 코드로 |
 
-현재 빌드 시스템은 `local.properties`에서 다음 키들을 읽어 `BuildConfig`로 주입합니다.
-키 문자열은 더 이상 소스에 포함되지 않습니다.
+빌드 시스템은 `local.properties`에서 다음 키들을 읽어 `BuildConfig`로 주입하며,
+키 문자열은 소스에 포함되지 않습니다.
 
 | `local.properties` 키 | `BuildConfig` 필드 | 사용처 |
 | --- | --- | --- |
@@ -113,8 +112,7 @@ covid-pass-nfc/
 | `BUSINESS_API_KEY` | `BuildConfig.BUSINESS_API_KEY` | odcloud 사업자번호 진위 검증 |
 | `INSPECTOR_CODE` | `BuildConfig.INSPECTOR_CODE` | 역학조사관 진입 코드 |
 
-`local.properties`와 `app/google-services.json`은 `.gitignore` 권장 — 본인의 키를
-다른 저장소나 PR에 다시 커밋하지 마세요.
+`local.properties`와 `app/google-services.json`은 `.gitignore`에 포함되어 있습니다.
 
 ## 빌드 방법
 
@@ -214,9 +212,8 @@ This project received the **silver award at the 2021 JBNU CS Capstone Showcase**
 ### Security Notes
 
 > [!IMPORTANT]
-> **Four secrets were committed in cleartext in earlier merged commits.**
-> Rotate all of them at their respective consoles. The current source masks
-> them via placeholders / `BuildConfig`, but they remain in git history.
+> Four secrets appeared in cleartext in earlier commits and need rotation
+> at their respective consoles.
 >
 > | Secret | Leaked prefix | Where to rotate |
 > | --- | --- | --- |
@@ -226,7 +223,7 @@ This project received the **silver award at the 2021 JBNU CS Capstone Showcase**
 > | Inspector code | `112255` | Operations policy — use a stronger code |
 
 The build system reads keys from `local.properties` and injects them via
-`BuildConfig`. No secrets remain in source.
+`BuildConfig`, so no secrets are present in source.
 
 | `local.properties` key | `BuildConfig` field | Use site |
 | --- | --- | --- |
@@ -234,8 +231,7 @@ The build system reads keys from `local.properties` and injects them via
 | `BUSINESS_API_KEY` | `BuildConfig.BUSINESS_API_KEY` | Business-number lookup |
 | `INSPECTOR_CODE` | `BuildConfig.INSPECTOR_CODE` | Epidemiologist mode gate |
 
-`local.properties` and `app/google-services.json` are gitignored — do not
-commit your own keys.
+`local.properties` and `app/google-services.json` are gitignored.
 
 ### Build
 
