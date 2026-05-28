@@ -29,22 +29,22 @@
 
 ## 主要功能
 
-- **NFC 出入登记** —— 手机触碰 NFC 标签时,`Nfc_pass_check` 会立即把用户记录写入 Firestore。
-- **疫苗接种证书验证** —— `Check_user_doc` 使用 Google Cloud Vision API 对接种凭证图片进行 OCR 并验证。
-- **企业资质验证** —— `Check_shop_doc` 通过 Jsoup 解析公共数据门户的工商登记查询结果,验证营业执照的真伪。
-- **流行病调查员模式** —— `history` 按时间顺序列出某门店的出入记录。
-- **一次性注册** —— 首次启动时,`Creat_user` 会把用户资料缓存到设备存储 (`UserDate.dat`)。
+- **NFC 出入登记** —— 手机触碰 NFC 标签时,`NfcEntryActivity` 会立即把用户记录写入 Firestore。
+- **疫苗接种证书验证** —— `VaccineCardCheckActivity` 使用 Google Cloud Vision API 对接种凭证图片进行 OCR 并验证。
+- **企业资质验证** —— `BusinessVerifyActivity` 通过 odcloud 公共 API 验证营业执照的真伪。
+- **流行病调查员模式** —— `HistoryActivity` 按时间顺序列出某门店的出入记录。
+- **一次性注册** —— 首次启动时,`ProfileSetupActivity` 会把用户资料缓存到设备存储 (`UserDate.dat`)。
 
 ## 屏幕
 
 | Activity | 说明 |
 |---|---|
 | `MainActivity` | 启动画面;根据是否已缓存用户资料分支到注册或主界面。 |
-| `Creat_user` | 首次用户注册。 |
-| `Nfc_pass_check` | NFC 标签扫描 + 出入记录写入。 |
-| `Check_user_doc` | 疫苗证书图片验证 (Cloud Vision)。 |
-| `Check_shop_doc` | 营业执照号码验证 (公共 API)。 |
-| `history` | 出入记录查询。 |
+| `ProfileSetupActivity` | 首次用户注册。 |
+| `NfcEntryActivity` | NFC 标签扫描 + 出入记录写入。 |
+| `VaccineCardCheckActivity` | 疫苗证书图片验证 (Cloud Vision)。 |
+| `BusinessVerifyActivity` | 营业执照号码验证 (公共 API)。 |
+| `HistoryActivity` | 出入记录查询。 |
 
 ## 技术栈
 
@@ -76,15 +76,15 @@ covid-pass-nfc/
 │   ├── build.gradle
 │   └── src/main/
 │       ├── AndroidManifest.xml
-│       ├── java/com/example/nfcpass/
-│       │   ├── MainActivity.java           # 启动 + 分支
-│       │   ├── Creat_user.java             # 首次用户注册
-│       │   ├── Nfc_pass_check.java         # NFC 标签处理
-│       │   ├── Check_user_doc.java         # 疫苗证书验证
-│       │   ├── Check_shop_doc.java         # 营业执照号验证
-│       │   ├── history.java                # 出入记录查询
-│       │   ├── DataParser.java             # 工商查询 JSON 响应解析
-│       │   ├── RequestHttpURLConnection.java
+│       ├── java/com/jumincho/cvpass/
+│       │   ├── MainActivity.java                # 启动 + 分支
+│       │   ├── ProfileSetupActivity.java        # 首次用户注册
+│       │   ├── NfcEntryActivity.java            # NFC 标签处理
+│       │   ├── VaccineCardCheckActivity.java    # 疫苗证书验证
+│       │   ├── BusinessVerifyActivity.java      # 营业执照号验证
+│       │   ├── HistoryActivity.java             # 出入记录查询
+│       │   ├── BusinessLookupParser.java        # 工商查询 JSON 响应解析
+│       │   ├── HttpClient.java                  # POST JSON 客户端
 │       │   ├── PackageManagerUtils.java
 │       │   └── PermissionUtils.java
 │       └── res/                            # 布局 / 资源 / 字符串等
@@ -128,9 +128,9 @@ covid-pass-nfc/
 | 所属 | 角色 | 姓名 | 负责 |
 |---|---|---|---|
 | JBNU | 队长 | 李正焕 | 开发 / 设计 |
-| JBNU | 队员 | 金연호 | 开发 / 设计 |
-| JBNU | 队员 | 郑재영 | 开发 / 设计 |
-| JBNU | 队员 | 赵주민 | 演讲 / 设计 |
+| JBNU | 队员 | 金年浩 | 开发 / 设计 |
+| JBNU | 队员 | 郑在荣 | 开发 / 设计 |
+| JBNU | 队员 | 赵主民 | 演讲 / 设计 |
 
 ## 许可证
 
